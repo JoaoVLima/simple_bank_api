@@ -1,7 +1,8 @@
 {
     "require": {
         "slim/slim": "^4.13",
-        "guzzlehttp/psr7": "^2"
+        "guzzlehttp/psr7": "^2",
+        "bryanjhv/slim-session": "~4.0"
     },
     "autoload": {
         "psr-4": {
