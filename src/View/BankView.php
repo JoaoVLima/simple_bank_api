@@ -3,7 +3,6 @@ namespace Api\View;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpException;
 use Api\Controller\BankController;
 
 class BankView
@@ -39,9 +38,14 @@ class BankView
         $params = json_decode($request->getBody()->getContents(),true);
         $event = $params['type'];
         unset($params['type']);
-        $banco->$event(...$params);
-
-        $response->getBody()->write("Welcome to simple bank api!");
+        $result = $banco->$event(...$params);
+        if(!$result){
+            $response->getBody()->write('0');
+            $response = $response->withStatus(404);
+            return $response;
+        }
+        $response->getBody()->write(json_encode($result));
+        $response = $response->withStatus(201);
         return $response;
     }
 }
