@@ -10,7 +10,7 @@ class BankController
 
     public function __construct()
     {
-        $this->bank = Bank::getInstance();
+        $this->bank = new Bank();
     }
 
     public function createAccount(string $accountId, int $initialBalance = 0): Account
