@@ -3,7 +3,7 @@ POST http://localhost:8888/reset
 # 200 OK
 
 ### Get balance for non-existing account
-POST http://localhost:8888/balance?account_id=1234
+GET http://localhost:8888/balance?account_id=1234
 # 404 0
 
 ### Create account with initial balance
