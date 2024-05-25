@@ -45,24 +45,37 @@ class BankController
         return ['destination' => ['id' => $destination, 'balance' => $balance]];
     }
 
-    public function withdraw(string $origin, float $amount): float{
+    public function withdraw(string $origin, float $amount): ?array{
         if ($amount <= 0){
-            throw new Exception("Cant withdraw $amount");
+            return null;
         }
 
-        $origin = $this->getAccount($origin);
-        $balance = $origin->getBalance();
+        $origin_account = $this->getAccount($origin);
+        if (!$origin_account){
+            return null;
+        }
+        $balance = $origin_account->getBalance();
 
         if ($amount > $balance){
-            throw new Exception("Cant withdraw $amount");
+            return null;
         }
 
-        $origin->setBalance($balance - $amount);
+        $origin_account->setBalance($balance - $amount);
+        $balance = $origin_account->getBalance();
+
+        return ['origin' => ['id' => $origin, 'balance' => $balance]];
     }
 
-    public function transfer(string $origin, float $amount, string $destination): void{
-        $this->withdraw($origin, $amount);
-        $this->deposit($destination, $amount);
+    public function transfer(string $origin, float $amount, string $destination): ?array{
+        $withdraw_result = $this->withdraw($origin, $amount);
+        if (!$withdraw_result){
+            return null;
+        }
+        $deposit_result = $this->deposit($destination, $amount);
+        if (!$deposit_result){
+            return null;
+        }
+        return array_merge($withdraw_result,$deposit_result);
     }
 
     public function reset(): void
