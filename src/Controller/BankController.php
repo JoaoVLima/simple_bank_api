@@ -23,11 +23,11 @@ class BankController
         return $account;
     }
 
-    public function getAccount(string $accountId): Account
+    public function getAccount(string $accountId): ?Account
     {
         $accounts = $this->bank->getAccounts();
         if (!array_key_exists($accountId, $accounts)) {
-            throw new Exception("Account with ID $accountId not found");
+            return null;
         }
         return $accounts[$accountId];
     }

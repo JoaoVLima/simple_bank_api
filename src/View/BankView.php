@@ -21,8 +21,15 @@ class BankView
     {
         $banco = new BankController();
         $params = $request->getQueryParams();
-        $balance = $banco->getAccount($params['account_id'])?->getBalance();
-        $response->getBody()->write($balance);
+        $account = $banco->getAccount($params['account_id']);
+        if (!$account){
+            $response->getBody()->write('0');
+            $response = $response->withStatus(404);
+            return $response;
+        }
+        $balance = $account->getBalance();
+        $response->getBody()->write(strval($balance));
+        $response = $response->withStatus(200);
         return $response;
     }
 
