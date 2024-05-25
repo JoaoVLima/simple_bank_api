@@ -13,13 +13,10 @@ class BankController
         $this->bank = Bank::getInstance();
     }
 
-    public function createAccount(int $initialBalance = 0): Account
+    public function createAccount(string $accountId, int $initialBalance = 0): Account
     {
-        var_dump($this->bank->getAccounts());
-        $accountId = uniqid();
         $account = new Account($accountId, $initialBalance);
         $this->bank->addAccount($account);
-        var_dump($this->bank->getAccounts());
         return $account;
     }
 
@@ -32,16 +29,23 @@ class BankController
         return $accounts[$accountId];
     }
 
-    public function deposit(string $destination, float $amount): void{
+    public function deposit(string $destination, float $amount): ?array
+    {
         if ($amount <= 0){
-            throw new Exception("Cant deposit $amount");
+            return null;
         }
-        $destination = $this->getAccount($destination);
-        $balance = $destination->getBalance();
-        $destination->setBalance($balance + $amount);
+        $destination_account = $this->getAccount($destination);
+        if (!$destination_account){
+            $destination_account = $this->createAccount($destination);
+        }
+        $balance = $destination_account->getBalance();
+        $destination_account->setBalance($balance + $amount);
+        $balance = $destination_account->getBalance();
+
+        return ['destination' => ['id' => $destination, 'balance' => $balance]];
     }
 
-    public function withdraw(string $origin, float $amount): void{
+    public function withdraw(string $origin, float $amount): float{
         if ($amount <= 0){
             throw new Exception("Cant withdraw $amount");
         }
