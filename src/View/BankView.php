@@ -12,8 +12,8 @@ class BankView
     {
         $banco = new BankController();
         $banco->reset();
-        $response->getBody()->write('NOK');
-        $response = $response->withStatus(404);
+        $response->getBody()->write('OK');
+        $response = $response->withStatus(200);
         return $response;
     }
 

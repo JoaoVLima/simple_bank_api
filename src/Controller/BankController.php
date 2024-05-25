@@ -61,7 +61,8 @@ class BankController
         $this->deposit($destination, $amount);
     }
 
-    public function reset(){
+    public function reset(): void
+    {
         $this->bank->setAccounts([]);
     }
 
