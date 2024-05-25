@@ -2,5 +2,10 @@
     "require": {
         "slim/slim": "^4.13",
         "guzzlehttp/psr7": "^2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\": "src/"
+        }
     }
 }
